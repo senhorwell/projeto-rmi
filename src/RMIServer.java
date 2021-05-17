@@ -4,11 +4,15 @@ import java.rmi.registry.Registry;
 public class RMIServer {
 
 	Integer port = 8000;
+	Integer port2 = 8001;
 	
 	private void startServer(){
         try {
             Registry registry = LocateRegistry.createRegistry(port);                        
             registry.rebind("ConvertColor", new Grayscale());
+            
+            Registry registry2 = LocateRegistry.createRegistry(port2);                        
+            registry2.rebind("ConvertColor", new Grayscale());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }      
