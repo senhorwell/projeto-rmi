@@ -8,10 +8,10 @@ public class RMIServer {
 	
 	private void startServer(){
         try {
-            Registry registry = LocateRegistry.createRegistry(port);                        
-            registry.rebind("ConvertColor", new Grayscale());
+            Registry registry = LocateRegistry.createRegistry(port);
+            Registry registry2 = LocateRegistry.createRegistry(port2);
             
-            Registry registry2 = LocateRegistry.createRegistry(port2);                        
+            registry.rebind("ConvertColor", new Grayscale());
             registry2.rebind("ConvertColor", new Grayscale());
         } catch (Exception e) {
             System.out.println(e.getMessage());
