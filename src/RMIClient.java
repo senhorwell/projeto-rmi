@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,7 +47,7 @@ class ThreadWorker extends Thread {
             	images = baos.toByteArray();
             	}
             	else {
-            		BufferedImage halfImg = img.getSubimage(0, 0,(img.getWidth()/2), img.getHeight());
+            		BufferedImage halfImg = img.getSubimage((img.getWidth()/2), 0,(img.getWidth()/2), img.getHeight());
             		ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 	ImageIO.write(halfImg, fileExtension, baos);
                 	images = new byte[baos.size()];
@@ -56,9 +59,10 @@ class ThreadWorker extends Thread {
             	// Converte pra Grayscale
             	byte[] imageOut = message.Convert(images, fileNumber, fileName, fileExtension);
     			BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageOut));
+    			
+    			File destinationPath = new File(pathNewFile + fileName + "_grayscale" + half +"." + fileExtension);
+    			ImageIO.write(image, fileExtension, destinationPath);
     			return image;
-    			//File destinationPath = new File(pathNewFile + fileName + "_grayscale" + half +"." + fileExtension);
-    			//ImageIO.write(image, fileExtension, destinationPath);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage() + " Error in thread 1");
@@ -74,13 +78,24 @@ public class RMIClient {
         long Inicio = System.currentTimeMillis();
         Integer port1 = 8000;
         Integer port2 = 8001;
-        BufferedImage halfImg1, halfImg2;
-        
+        BufferedImage half1, half2;
+        BufferedImage half3;
+        Integer w, h;
         
         ThreadWorker t1 = new ThreadWorker("127.0.0.1", 1);
-        ThreadWorker t2 = new ThreadWorker("127.0.0.1", 1);
-        halfImg1 = t1.run(port1, 1);
-        halfImg2 = t2.run(port2, 2);
+        ThreadWorker t2 = new ThreadWorker("127.0.0.2", 1);
+        half1 = t1.run(port1, 1);
+        half2 = t2.run(port2, 2);
+        
+        w = 2*half1.getWidth() +1;
+        h = half1.getHeight();
+        BufferedImage combined = new BufferedImage(w,h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = combined.createGraphics();
+        g.drawImage(half1, 0, 0, null);
+        g.drawImage(half2, half1.getWidth(), 0, null);
+
+        g.dispose();
+        ImageIO.write(combined, "jpg", new File("img\\grayImage\\combined.jpg"));
         
         long Fim = System.currentTimeMillis();
 		long Total = (Fim - Inicio) / 1000;
