@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -79,11 +77,10 @@ public class RMIClient {
         Integer port1 = 8000;
         Integer port2 = 8001;
         BufferedImage half1, half2;
-        BufferedImage half3;
         Integer w, h;
         
         ThreadWorker t1 = new ThreadWorker("127.0.0.1", 1);
-        ThreadWorker t2 = new ThreadWorker("127.0.0.2", 1);
+        ThreadWorker t2 = new ThreadWorker("127.0.0.1", 1);
         half1 = t1.run(port1, 1);
         half2 = t2.run(port2, 2);
         
