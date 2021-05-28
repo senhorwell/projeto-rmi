@@ -13,7 +13,7 @@ public class RMIServer2 {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }      
-        System.out.println("Server ligado!!!");
+        System.out.println("Server 2 ligado!!!");
     }
 	
 	public static void main(String[] args) {
